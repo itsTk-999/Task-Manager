@@ -10,7 +10,7 @@ import axios from 'axios';
 
 // --- FINAL CONFIGURATION ---
 // Set the base URL for all API requests (Render URL in production, localhost in dev)
-axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000' || 'https://task-manager-x30e.onrender.com';
 // --- END FINAL CONFIGURATION ---
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

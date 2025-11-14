@@ -12,7 +12,9 @@ const app = express();
 // Define the list of allowed origins
 const allowedOrigins = [
   'http://localhost:3000', // Allows local frontend development
-  'https://taskmanager001.vercel.app' // Your production Vercel URL
+  'https://taskmanager001.vercel.app',
+  'https://taskmanager-git-main-lil-tks-projects.vercel.app',
+'https://taskmanager-17l4v8fb8-lil-tks-projects.vercel.app' // Your production Vercel URL
 ];
 
 const corsOptions = {
