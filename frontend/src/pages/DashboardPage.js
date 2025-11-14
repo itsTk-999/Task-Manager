@@ -21,7 +21,7 @@ const DashboardPage = () => {
       }
       try {
         const config = { headers: { 'x-auth-token': token } };
-        const res = await axios.get('http://localhost:5000/api/users/me', config);
+        const res = await axios.get('/api/users/me', config);
 
         if (res.data.name && typeof res.data.name === 'string') {
           setUserName(res.data.name.split(' ')[0]);

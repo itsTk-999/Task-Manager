@@ -62,14 +62,14 @@ const TaskForm = ({ existingTask, onTaskUpdated }) => {
       if (existingTask) {
         // --- EDIT MODE ---
         // We are editing, so use the PUT route
-        await axios.put(`http://localhost:5000/api/tasks/${existingTask._id}`, body, config);
+        await axios.put(`/api/tasks/${existingTask._id}`, body, config);
         showNotification('Task updated successfully!', 'success');
         if (onTaskUpdated) onTaskUpdated(); // Close the modal
       
       } else {
         // --- CREATE MODE ---
         // We are creating a new task, so use the POST route
-        const res = await axios.post('http://localhost:5000/api/tasks', body, config);
+        const res = await axios.post('/api/tasks', body, config);
         const newTask = res.data;
 
         // (We removed the reminder logic from here, which was correct)

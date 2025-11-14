@@ -27,8 +27,8 @@ const ProfilePage = ({ onLogout }) => {
       },
     };
 
-    const fetchUser = axios.get('http://localhost:5000/api/users/me', config);
-    const fetchTasks = axios.get('http://localhost:5000/api/tasks', config);
+    const fetchUser = axios.get('/api/users/me', config);
+    const fetchTasks = axios.get('/api/tasks', config);
 
     // Fetch both at the same time
     Promise.all([fetchUser, fetchTasks])

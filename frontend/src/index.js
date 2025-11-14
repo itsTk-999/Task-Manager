@@ -5,7 +5,10 @@ import App from './App';
 import { ThemeProvider } from './context/ThemeContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { ModalProvider } from './context/ModalContext';
-import { EditModalProvider } from './context/EditModalContext'; // <-- 1. IMPORT
+import { EditModalProvider } from './context/EditModalContext';
+import axios from 'axios'; // <-- 1. IMPORT
+
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

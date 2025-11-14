@@ -14,7 +14,7 @@ const ForgotPasswordPage = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/users/forgot-password',
+        '/api/users/forgot-password',
         { email },
         { headers: { 'Content-Type': 'application/json' } }
       );

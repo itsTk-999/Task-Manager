@@ -36,7 +36,7 @@ const TaskItem = ({ task, onTaskDelete, onTaskUpdate }) => {
     try {
       const config = { headers: { 'x-auth-token': token } };
       const res = await axios.put(
-        `http://localhost:5000/api/tasks/${task._id}`,
+        `/api/tasks/${task._id}`,
         { ...task, status: newStatus }, // Send updated status
         config
       );
@@ -53,7 +53,7 @@ const TaskItem = ({ task, onTaskDelete, onTaskUpdate }) => {
     const token = localStorage.getItem('token');
     try {
       const config = { headers: { 'x-auth-token': token } };
-      await axios.delete(`http://localhost:5000/api/tasks/${task._id}`, config);
+      await axios.delete(`/api/tasks/${task._id}`, config);
       onTaskDelete(task._id); // Update the list in TasksPage
     } catch (err) {
       console.error('Failed to delete task', err);

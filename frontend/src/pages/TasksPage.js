@@ -31,7 +31,7 @@ const TasksPage = () => {
       }
       try {
         const config = { headers: { 'x-auth-token': token } };
-        const res = await axios.get('http://localhost:5000/api/tasks', config);
+        const res = await axios.get('/api/tasks', config);
         setTasks(res.data); // Set the original, full list of tasks
 
         const now = new Date().getTime();
