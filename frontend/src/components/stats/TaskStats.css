@@ -1,0 +1,40 @@
+.charts-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.chart-wrapper {
+  background: var(--bg-light);
+  padding: 1rem;
+  border-radius: 8px;
+
+  /* --- THIS IS THE FIX --- */
+  /* 1. This prevents the chart from "leaking" out */
+  overflow: hidden;
+  /* --- END FIX --- */
+}
+
+.chart-inner-wrapper {
+  position: relative;
+  /* Set a smaller height for mobile */
+  height: 250px;
+
+  /* --- THIS IS THE FIX --- */
+  /* 2. This forces the chart to be 100% wide */
+  width: 100%;
+  /* --- END FIX --- */
+}
+
+/* On larger screens, show charts side-by-side and give them more height */
+@media (min-width: 768px) {
+  .charts-container {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .chart-inner-wrapper {
+    /* Give them more space on desktop */
+    height: 350px;
+  }
+}

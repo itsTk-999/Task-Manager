@@ -1,0 +1,396 @@
+/* === THEME & ANIMATIONS === */
+.btn {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all var(--transition-speed);
+}
+
+.btn-primary {
+  background-image: linear-gradient(45deg, var(--blue), var(--green));
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 168, 107, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 168, 107, 0.5);
+}
+
+/* === GLASSMORPHISM === */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  animation: fadeIn 0.5s var(--transition-speed) forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === AUTH PAGE STYLING === */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(
+    --bg-dark-gradient,
+    linear-gradient(135deg, #1a1a2e, #16213e)
+  );
+  padding: 1rem;
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 400px;
+  color: #f4f4f4;
+}
+
+.auth-form h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  color: #f4f4f4; /* Override h2 default */
+}
+
+/* === FLOATING LABEL INPUTS === */
+.form-group {
+  position: relative;
+  margin-bottom: 2rem;
+}
+.password-icon {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  z-index: 2;
+  font-size: 1.1rem;
+}
+
+.password-icon:hover {
+  color: #fff;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 1rem;
+  color: #f4f4f4;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  outline: none;
+  transition: var(--transition-speed);
+}
+
+.form-label {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  transition: var(--transition-speed);
+}
+
+.form-input:focus + .form-label,
+.form-input:valid + .form-label {
+  top: -15px;
+  left: 0;
+  font-size: 0.8rem;
+  color: var(--orange);
+}
+
+.form-input:focus {
+  border-bottom-color: var(--orange);
+}
+
+.auth-form .btn {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.auth-toggle {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.auth-toggle span {
+  color: var(--orange);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* === STICKY BOTTOM NAV === */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 65px;
+  background: var(--bg-white);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  z-index: 1000;
+  transition: background-color var(--transition-speed);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light-gray);
+  text-decoration: none;
+  font-size: 0.75rem;
+  transition: var(--transition-speed);
+}
+
+.nav-item svg {
+  font-size: 1.5rem;
+  margin-bottom: 2px;
+}
+
+.nav-item.active {
+  color: var(--blue);
+  transform: scale(1.1);
+}
+
+.nav-item.add-task-btn {
+  background: linear-gradient(45deg, var(--orange), #ff4e00);
+  color: white;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  margin-top: -20px;
+  box-shadow: 0 0 15px rgba(255, 122, 0, 0.5);
+  font-size: 2rem;
+  padding-bottom: 5px;
+}
+
+.nav-item.add-task-btn svg {
+  margin: 0;
+}
+
+/* === FORM STYLES (Light/Dark Theme) === */
+.task-form {
+  background: var(--bg-white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: background-color var(--transition-speed);
+}
+
+.form-group-light {
+  margin-bottom: 1rem;
+}
+
+.form-group-light label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.form-group-light input,
+.form-group-light textarea,
+.form-group-light select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: "Roboto", sans-serif;
+  transition: all 0.3s ease;
+}
+
+.form-group-light input:focus,
+.form-group-light textarea:focus,
+.form-group-light select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.2);
+}
+
+.error-text {
+  color: var(--orange);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* === TASK LIST STYLES === */
+.task-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.task-item {
+  background: var(--bg-white);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+  padding: 1rem;
+  transition: all 0.3s ease;
+  border-left: 5px solid var(--blue);
+}
+
+.task-item.completed {
+  opacity: 0.7;
+  border-left-color: var(--green);
+}
+
+.task-item.completed .task-title {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.task-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.task-priority {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.task-category {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-light-gray);
+  background: var(--bg-light);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  transition: background-color var(--transition-speed),
+    color var(--transition-speed);
+}
+
+.task-title {
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+}
+
+.task-description {
+  font-size: 0.9rem;
+  color: var(--text-light-gray);
+  margin-bottom: 0.75rem;
+}
+
+.task-deadline {
+  font-size: 0.8rem;
+  color: var(--orange);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.task-item-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.task-action-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.task-action-btn.complete-btn {
+  color: var(--green);
+}
+.task-action-btn.complete-btn:hover {
+  background-color: rgba(0, 168, 107, 0.1);
+}
+
+.task-action-btn.delete-btn {
+  color: var(--orange);
+}
+.task-action-btn.delete-btn:hover {
+  background-color: rgba(255, 122, 0, 0.1);
+}
+.task-reminder {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--blue);
+  background-color: rgba(0, 119, 204, 0.1);
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+/* ... (at the bottom, with the other button styles) ... */
+
+.task-action-btn.edit-btn {
+  color: var(--blue);
+}
+.task-action-btn.edit-btn:hover {
+  background-color: rgba(0, 119, 204, 0.1);
+}
+/* ... (at the end of the Auth Page Styling section) ... */
+.auth-links {
+  display: flex;
+  flex-direction: column; /* Stack them vertically */
+  align-items: center; /* Center them horizontally */
+  gap: 0.75rem; /* Add space between the two links */
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.auth-toggle {
+  margin: 0; /* Remove default paragraph margin */
+}
+
+.auth-toggle span {
+  color: var(--orange);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.auth-forgot-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+}
+.auth-forgot-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}

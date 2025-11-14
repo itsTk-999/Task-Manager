@@ -1,0 +1,77 @@
+.notification-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 250px;
+  max-width: 350px;
+  background-color: var(--bg-white);
+  border-left-width: 5px;
+  border-left-style: solid;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  z-index: 9999;
+  cursor: pointer;
+
+  /* Animation */
+  animation: slideIn 0.3s ease-out forwards, fadeOut 0.5s 4.5s forwards;
+}
+
+body.dark .notification-toast {
+  background-color: #1e2a47; /* A dark card color */
+}
+
+/* Colors based on type */
+.notification-toast.info {
+  border-left-color: var(--blue);
+}
+.notification-toast.success {
+  border-left-color: var(--green);
+}
+.notification-toast.error {
+  border-left-color: var(--orange);
+}
+
+.notification-icon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+.notification-toast.info .notification-icon {
+  color: var(--blue);
+}
+.notification-toast.success .notification-icon {
+  color: var(--green);
+}
+.notification-toast.error .notification-icon {
+  color: var(--orange);
+}
+
+.notification-message {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}

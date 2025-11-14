@@ -1,0 +1,61 @@
+/* This new wrapper handles positioning */
+.reminder-bell-wrapper {
+  position: relative;
+}
+
+.reminder-bell {
+  position: relative;
+  cursor: pointer;
+  color: var(--text-dark);
+  padding: 0.5rem;
+}
+
+/* Fix for dark mode text */
+body.dark .reminder-bell {
+  color: #ffffff;
+}
+/* Fix for light mode on gradient */
+.welcome-card .reminder-bell {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bell-icon {
+  font-size: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.reminder-bell:hover .bell-icon {
+  transform: scale(1.1) rotate(10deg);
+}
+
+.unseen-badge-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  background-color: var(--orange);
+  border-radius: 50%;
+  border: 2px solid var(--bg-white);
+}
+
+.welcome-card .unseen-badge-dot {
+  border-color: var(--blue);
+}
+
+.reminder-bell.unseen .unseen-badge-dot {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 122, 0, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 122, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 122, 0, 0);
+  }
+}
