@@ -6,9 +6,12 @@ import { ThemeProvider } from './context/ThemeContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { ModalProvider } from './context/ModalContext';
 import { EditModalProvider } from './context/EditModalContext';
-import axios from 'axios'; // <-- 1. IMPORT
+import axios from 'axios'; 
 
+// --- FINAL UPDATE: AXIOS BASE URL CONFIGURATION ---
+// This ensures that all axios calls use the live Render API URL
 axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// --- END UPDATE ---
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,9 +19,9 @@ root.render(
     <ThemeProvider>
       <NotificationProvider>
         <ModalProvider>
-          <EditModalProvider> {/* <-- 2. WRAP */}
+          <EditModalProvider>
             <App />
-          </EditModalProvider> {/* <-- 3. WRAP */}
+          </EditModalProvider>
         </ModalProvider>
       </NotificationProvider>
     </ThemeProvider>
