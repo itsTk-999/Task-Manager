@@ -21,30 +21,25 @@ const Register = ({ onToggleMode }) => {
     setError('');
 
     try {
-      const res = await axios.post(
-        '/api/users/register', // <-- USE RELATIVE PATH
+      // Use relative path
+      const res = await axios.post('/api/users/register', 
         { name, email, password },
         { headers: { 'Content-Type': 'application/json' } }
       );
 
       localStorage.setItem('token', res.data.token);
-      window.location.href = '/dashboard'; // Redirect to dashboard
+      window.location.href = '/dashboard';
 
     } catch (err) {
-      // --- ROBUST CATCH BLOCK ---
       console.error("Registration failed:", err); 
       
       if (err.response) {
-        // Server responded with an error (e.g., 400 "User already exists")
         setError(err.response.data?.msg || 'Registration failed. Please check your email.');
       } else if (err.request) {
-        // Request was made, but no response was received (SERVER OFFLINE)
         setError('Cannot connect to the server. Is your backend running?');
       } else {
-        // Something else happened (e.g., JS error)
         setError('An unexpected error occurred.');
       }
-      // --- END ROBUST CATCH BLOCK ---
     }
   };
 

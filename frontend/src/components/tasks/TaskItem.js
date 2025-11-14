@@ -1,24 +1,19 @@
 import React from 'react';
 import axios from 'axios';
-// Import all the icons we need
 import { FaTrash, FaCheck, FaSpinner, FaBell, FaPencilAlt } from 'react-icons/fa';
-// Import the hooks for both modals
 import { useModal } from '../../context/ModalContext';
 import { useEditModal } from '../../context/EditModalContext'; 
 
 const TaskItem = ({ task, onTaskDelete, onTaskUpdate }) => {
-  const { showModal } = useModal(); // Hook for the delete confirmation
-  const { openModal } = useEditModal(); // Hook for the edit modal
+  const { showModal } = useModal(); 
+  const { openModal } = useEditModal(); 
 
-  /**
-   * Returns a color based on the task priority.
-   */
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 'High':
         return 'var(--orange)';
       case 'Medium':
-        return '#f0e68c'; // Khaki
+        return '#f0e68c';
       case 'Low':
         return 'var(--green)';
       default:
@@ -26,55 +21,45 @@ const TaskItem = ({ task, onTaskDelete, onTaskUpdate }) => {
     }
   };
   
-  /**
-   * Toggles the task status between 'Completed' and 'To-Do'.
-   */
   const handleToggleStatus = async () => {
     const newStatus = task.status === 'Completed' ? 'To-Do' : 'Completed';
     const token = localStorage.getItem('token');
     
     try {
       const config = { headers: { 'x-auth-token': token } };
+      // Use relative path
       const res = await axios.put(
         `/api/tasks/${task._id}`,
-        { ...task, status: newStatus }, // Send updated status
+        { ...task, status: newStatus }, 
         config
       );
-      onTaskUpdate(res.data); // Update the list in TasksPage
+      onTaskUpdate(res.data);
     } catch (err) {
       console.error('Failed to update status', err);
     }
   };
   
-  /**
-   * This is the actual delete logic that will be passed to the modal.
-   */
   const doDelete = async () => {
     const token = localStorage.getItem('token');
     try {
       const config = { headers: { 'x-auth-token': token } };
+      // Use relative path
       await axios.delete(`/api/tasks/${task._id}`, config);
-      onTaskDelete(task._id); // Update the list in TasksPage
+      onTaskDelete(task._id);
     } catch (err) {
       console.error('Failed to delete task', err);
     }
   };
 
-  /**
-   * This function opens the confirmation modal for deleting.
-   */
   const handleDelete = () => {
     showModal(
       `Are you sure you want to delete the task: "${task.title}"?`,
-      doDelete // Pass the delete function as the callback
+      doDelete
     );
   };
 
-  /**
-   * This function opens the edit modal.
-   */
   const handleEdit = () => {
-    openModal(task); // Pass the entire task object to the edit context
+    openModal(task);
   };
 
   return (
@@ -115,7 +100,6 @@ const TaskItem = ({ task, onTaskDelete, onTaskUpdate }) => {
           {task.status === 'Completed' ? <FaCheck /> : (task.status === 'In Progress' ? <FaSpinner /> : 'Complete')}
         </button>
         
-        {/* --- NEW EDIT BUTTON --- */}
         <button 
           className="task-action-btn edit-btn"
           onClick={handleEdit}
@@ -123,8 +107,7 @@ const TaskItem = ({ task, onTaskDelete, onTaskUpdate }) => {
         >
           <FaPencilAlt />
         </button>
-        {/* --- END NEW BUTTON --- */}
-
+        
         <button 
           className="task-action-btn delete-btn"
           onClick={handleDelete}

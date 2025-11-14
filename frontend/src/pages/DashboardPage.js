@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { FaPlus, FaTasks } from 'react-icons/fa';
 import Clock from '../components/dashboard/Clock';
 import Weather from '../components/dashboard/Weather';
-import ReminderBell from '../components/dashboard/ReminderBell'; // <-- IMPORT
+import ReminderBell from '../components/dashboard/ReminderBell';
 import './DashboardPage.css';
 
 const DashboardPage = () => {
@@ -21,10 +21,11 @@ const DashboardPage = () => {
       }
       try {
         const config = { headers: { 'x-auth-token': token } };
+        // Use relative path
         const res = await axios.get('/api/users/me', config);
-
+        
         if (res.data.name && typeof res.data.name === 'string') {
-          setUserName(res.data.name.split(' ')[0]);
+          setUserName(res.data.name.split(' ')[0]); 
         } else {
           setUserName('User'); 
         }
@@ -49,24 +50,17 @@ const DashboardPage = () => {
 
   return (
     <div className="dashboard-grid">
-      {/* Welcome Card */}
       <div className="dashboard-card welcome-card">
-        {/* UPDATED SECTION */}
         <div className="welcome-content">
           <h2>Hello, {userName}!</h2>
           <p>This is your dashboard. Manage your day successfully.</p>
         </div>
-        <ReminderBell /> {/* <-- ADDED BELL */}
-        {/* END UPDATE */}
+        <ReminderBell />
       </div>
 
-      {/* Clock Card */}
       <Clock />
-
-      {/* Weather Card */}
       <Weather />
 
-      {/* Quick Links Card */}
       <div className="dashboard-card quick-links-card">
         <h3>Quick Links</h3>
         <div className="quick-links">

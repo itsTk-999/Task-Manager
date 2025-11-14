@@ -18,10 +18,10 @@ const Login = ({ onToggleMode }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError(''); 
     
     try {
-      // Use the relative path here, as the base URL is set in index.js
+      // Use relative path
       const res = await axios.post('/api/users/login', { 
         email, 
         password 
@@ -30,23 +30,18 @@ const Login = ({ onToggleMode }) => {
       });
 
       localStorage.setItem('token', res.data.token);
-      window.location.href = '/dashboard'; // Redirect to dashboard
+      window.location.href = '/dashboard'; 
 
     } catch (err) {
-      // --- ROBUST CATCH BLOCK ---
       console.error("Login failed:", err); 
       
       if (err.response) {
-        // The server responded with an error (e.g., 400 "Invalid Credentials")
         setError(err.response.data?.msg || 'Invalid credentials or server error.');
       } else if (err.request) {
-        // The request was made, but no response was received (SERVER OFFLINE)
         setError('Cannot connect to the server. Is your backend running?');
       } else {
-        // Something else happened (e.g., syntax error)
         setError('An unexpected error occurred.');
       }
-      // --- END ROBUST CATCH BLOCK ---
     }
   };
 

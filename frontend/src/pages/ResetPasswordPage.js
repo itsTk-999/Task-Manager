@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'; // <-- 1. Import icons
+import { FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState('');
@@ -9,17 +9,38 @@ const ResetPasswordPage = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  // --- 2. ADD TWO STATES ---
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  // --- END ADD ---
 
   const { token } = useParams();
   const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // ... (submit logic)
+    setMessage('');
+    setError('');
+
+    if (password !== confirmPassword) {
+      return setError('Passwords do not match.');
+    }
+    if (password.length < 6) {
+      return setError('Password must be at least 6 characters.');
+    }
+
+    try {
+      // Use relative path
+      await axios.post('/api/users/reset-password',
+        { token, password },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      
+      setMessage('Password reset successful! You can now log in.');
+      setTimeout(() => navigate('/login'), 3000);
+
+    } catch (err) {
+      setError(err.response?.data?.msg || 'An error occurred. The link may be invalid or expired.');
+      console.error(err);
+    }
   };
 
   return (
@@ -27,10 +48,9 @@ const ResetPasswordPage = () => {
       <div className="auth-form glass-panel">
         <h2>Set New Password</h2>
         <form onSubmit={onSubmit}>
-          {/* --- 3. UPDATE FIRST PASSWORD BLOCK --- */}
           <div className="form-group">
             <input
-              type={showPassword ? 'text' : 'password'} 
+              type={showPassword ? 'text' : 'password'}
               id="password"
               className="form-input"
               value={password}
@@ -52,9 +72,7 @@ const ResetPasswordPage = () => {
               />
             )}
           </div>
-          {/* --- END UPDATE --- */}
 
-          {/* --- 4. UPDATE SECOND PASSWORD BLOCK --- */}
           <div className="form-group">
             <input
               type={showConfirm ? 'text' : 'password'}
@@ -79,7 +97,6 @@ const ResetPasswordPage = () => {
               />
             )}
           </div>
-          {/* --- END UPDATE --- */}
 
           {message && <p style={{ color: 'var(--green)', textAlign: 'center' }}>{message}</p>}
           {error && <p style={{ color: 'var(--orange)', textAlign: 'center' }}>{error}</p>}

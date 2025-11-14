@@ -3,17 +3,16 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ThemeContext from '../context/ThemeContext';
 import { FaUser, FaEnvelope, FaCalendarAlt, FaCheck, FaListAlt } from 'react-icons/fa';
-import TaskStats from '../components/stats/TaskStats'; // <-- 1. IMPORT CHARTS
+import TaskStats from '../components/stats/TaskStats';
 import './ProfilePage.css';
 
 const ProfilePage = ({ onLogout }) => {
   const [user, setUser] = useState(null);
-  const [tasks, setTasks] = useState([]); // <-- 2. ADD TASK STATE
+  const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
-  // 3. FETCH USER AND TASKS
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -27,7 +26,9 @@ const ProfilePage = ({ onLogout }) => {
       },
     };
 
+    // Use relative path
     const fetchUser = axios.get('/api/users/me', config);
+    // Use relative path
     const fetchTasks = axios.get('/api/tasks', config);
 
     // Fetch both at the same time
@@ -47,7 +48,6 @@ const ProfilePage = ({ onLogout }) => {
 
   }, [navigate]);
 
-  // 4. CALCULATE SIMPLE STATS
   const simpleStats = useMemo(() => {
     const total = tasks.length;
     const completed = tasks.filter(t => t.status === 'Completed').length;
@@ -66,7 +66,6 @@ const ProfilePage = ({ onLogout }) => {
       
       {user && (
         <div className="profile-card card-glass">
-          {/* ... (User info: Name, Email, Member Since) ... */}
           <div className="profile-info-item">
             <FaUser />
             <div>
@@ -91,11 +90,9 @@ const ProfilePage = ({ onLogout }) => {
         </div>
       )}
 
-      {/* --- 5. NEW STATISTICS SECTION --- */}
       <div className="statistics-card card-glass">
         <strong>Task Statistics</strong>
         
-        {/* Simple Stat Cards */}
         <div className="stat-cards-container">
           <div className="stat-card">
             <FaListAlt className="stat-icon icon-total" />
@@ -113,18 +110,15 @@ const ProfilePage = ({ onLogout }) => {
           </div>
         </div>
 
-        {/* Charts Component */}
         {tasks.length > 0 ? (
           <TaskStats tasks={tasks} />
         ) : (
           <p className="no-stats">No task data to display. Go create some tasks!</p>
         )}
       </div>
-      {/* --- END NEW SECTION --- */}
 
       <div className="settings-card card-glass">
         <strong>Settings</strong>
-        {/* ... (Theme Toggle) ... */}
         <div className="theme-toggle">
           <span>{theme === 'light' ? 'Light Mode' : 'Dark Mode'}</span>
           <label className="switch">

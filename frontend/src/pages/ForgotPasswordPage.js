@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FaEnvelope } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
@@ -13,8 +14,8 @@ const ForgotPasswordPage = () => {
     setError('');
 
     try {
-      const res = await axios.post(
-        '/api/users/forgot-password',
+      // Use relative path
+      const res = await axios.post('/api/users/forgot-password',
         { email },
         { headers: { 'Content-Type': 'application/json' } }
       );
@@ -55,6 +56,14 @@ const ForgotPasswordPage = () => {
             Send Reset Link
           </button>
         </form>
+        <div className="auth-links">
+            <p className="auth-toggle">
+              Remembered your password? 
+              <Link to="/login" style={{ color: 'var(--orange)', fontWeight: 500, marginLeft: '5px' }}>
+                Sign In
+              </Link>
+            </p>
+        </div>
       </div>
     </div>
   );

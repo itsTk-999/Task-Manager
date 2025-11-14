@@ -1,26 +1,24 @@
-import React, { useState, useEffect, useMemo } from 'react'; // <-- Import useMemo
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import TaskList from '../components/tasks/TaskList';
 import { useNotifications } from '../context/NotificationContext';
 import TaskSkeleton from '../components/tasks/TaskSkeleton';
-import './TasksPage.css'; // <-- 1. Import new CSS
+import { useMemo } from 'react'; // Added useMemo for filtering
+import './TasksPage.css';
 
 const TasksPage = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  // --- 2. ADD NEW STATE FOR FILTERS ---
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
   const [filterPriority, setFilterPriority] = useState('All');
-  // --- END NEW STATE ---
 
   const { showNotification, addReminder } = useNotifications();
   const navigate = useNavigate();
 
-  // useEffect (fetchTasks) remains unchanged...
   useEffect(() => {
     const timeoutIds = [];
     const fetchTasks = async () => {
@@ -29,26 +27,30 @@ const TasksPage = () => {
         navigate('/login'); 
         return;
       }
+
       try {
         const config = { headers: { 'x-auth-token': token } };
+        // Use relative path
         const res = await axios.get('/api/tasks', config);
-        setTasks(res.data); // Set the original, full list of tasks
+        setTasks(res.data);
 
         const now = new Date().getTime();
         res.data.forEach(task => {
           if (task.reminderTime) {
             const reminderTime = new Date(task.reminderTime).getTime();
             const delay = reminderTime - now;
+            
             if (delay > 0) {
               const timeoutId = setTimeout(() => {
                 const reminderMessage = `Reminder: ${task.title}`;
                 showNotification(reminderMessage, 'info');
-                addReminder(reminderMessage); 
+                addReminder(reminderMessage);
               }, delay);
               timeoutIds.push(timeoutId);
             }
           }
         });
+        
       } catch (err) {
         console.error(err);
         if (err.response && (err.response.status === 401 || err.response.status === 403)) {
@@ -61,44 +63,40 @@ const TasksPage = () => {
         setLoading(false);
       }
     };
+
     fetchTasks();
+
     return () => {
       timeoutIds.forEach(id => clearTimeout(id));
     };
+
   }, [navigate, showNotification, addReminder]);
 
-  // --- 3. CREATE A MEMO-IZED, FILTERED LIST ---
-  // This code only re-runs when the tasks or filters change
   const filteredTasks = useMemo(() => {
     const lowerSearchTerm = searchTerm.toLowerCase();
 
     return tasks.filter(task => {
-      // Check for search term (in title or description)
       const matchesSearch = 
         task.title.toLowerCase().includes(lowerSearchTerm) ||
         (task.description && task.description.toLowerCase().includes(lowerSearchTerm));
       
-      // Check for status filter
       const matchesStatus = 
         filterStatus === 'All' || task.status === filterStatus;
       
-      // Check for priority filter
       const matchesPriority = 
         filterPriority === 'All' || task.priority === filterPriority;
 
       return matchesSearch && matchesStatus && matchesPriority;
     });
   }, [tasks, searchTerm, filterStatus, filterPriority]);
-  // --- END MEMO ---
 
-  // ... (onTaskDelete, onTaskUpdate functions remain unchanged)
   const onTaskDelete = (id) => {
     setTasks(tasks.filter(task => task._id !== id));
   };
+  
   const onTaskUpdate = (updatedTask) => {
     setTasks(tasks.map(task => task._id === updatedTask._id ? updatedTask : task));
   };
-
 
   if (loading) {
     return (
@@ -115,12 +113,10 @@ const TasksPage = () => {
     return <div style={{ padding: '1rem', color: 'red' }}>{error}</div>;
   }
 
-  // --- 4. UPDATE THE RETURN JSX ---
   return (
     <div style={{ padding: '1rem' }}>
       <h2>All My Tasks</h2>
 
-      {/* NEW FILTER UI */}
       <div className="filter-container">
         <input
           type="text"
@@ -150,10 +146,9 @@ const TasksPage = () => {
           </select>
         </div>
       </div>
-      {/* END FILTER UI */}
 
       <TaskList 
-        tasks={filteredTasks} // <-- Pass the filtered list
+        tasks={filteredTasks} 
         onTaskDelete={onTaskDelete} 
         onTaskUpdate={onTaskUpdate} 
       />

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'; // <-- 1. Import useEffect
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useNotifications } from '../../context/NotificationContext';
 
-// --- 2. Accept new props ---
 const TaskForm = ({ existingTask, onTaskUpdated }) => {
+  const formKey = existingTask ? existingTask._id : 'new'; 
+  
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -15,10 +16,9 @@ const TaskForm = ({ existingTask, onTaskUpdated }) => {
   });
   const [error, setError] = useState('');
   
-  const { showNotification } = useNotifications(); // 3. Get showNotification
+  const { showNotification } = useNotifications();
   const navigate = useNavigate();
 
-  // --- 4. NEW: This effect fills the form when an 'existingTask' is passed in ---
   useEffect(() => {
     if (existingTask) {
       // Format dates correctly for the form inputs
@@ -39,14 +39,12 @@ const TaskForm = ({ existingTask, onTaskUpdated }) => {
       });
     }
   }, [existingTask]);
-  // --- END NEW ---
 
   const { title, description, priority, category, deadline, reminderTime } = formData;
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  // --- 5. MAJOR UPDATE: onSubmit now handles CREATE and UPDATE ---
   const onSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -58,24 +56,36 @@ const TaskForm = ({ existingTask, onTaskUpdated }) => {
       };
       
       const body = JSON.stringify(formData);
+      let res;
 
       if (existingTask) {
-        // --- EDIT MODE ---
-        // We are editing, so use the PUT route
+        // --- EDIT MODE (PUT) ---
+        // Use relative path
         await axios.put(`/api/tasks/${existingTask._id}`, body, config);
         showNotification('Task updated successfully!', 'success');
-        if (onTaskUpdated) onTaskUpdated(); // Close the modal
+        if (onTaskUpdated) onTaskUpdated();
       
       } else {
-        // --- CREATE MODE ---
-        // We are creating a new task, so use the POST route
-        const res = await axios.post('/api/tasks', body, config);
+        // --- CREATE MODE (POST) ---
+        // Use relative path
+        res = await axios.post('/api/tasks', body, config);
         const newTask = res.data;
 
-        // (We removed the reminder logic from here, which was correct)
-        navigate('/tasks'); // Navigate to the task list on success
-      }
+        if (newTask.reminderTime) {
+          const reminderTimeDate = new Date(newTask.reminderTime).getTime();
+          const now = new Date().getTime();
+          const delay = reminderTimeDate - now;
 
+          if (delay > 0) {
+            setTimeout(() => {
+              const reminderMessage = `Reminder: ${newTask.title}`;
+              showNotification(reminderMessage, 'info');
+            }, delay);
+          }
+        }
+        navigate('/tasks');
+      }
+      
     } catch (err) {
       const errorMsg = existingTask ? 'Failed to update task' : 'Failed to create task';
       setError(errorMsg);
@@ -84,7 +94,7 @@ const TaskForm = ({ existingTask, onTaskUpdated }) => {
   };
 
   return (
-    <form onSubmit={onSubmit} className="task-form">
+    <form onSubmit={onSubmit} className="task-form" key={formKey}> 
       {error && <p className="error-text">{error}</p>}
       
       <div className="form-group-light">
@@ -122,7 +132,6 @@ const TaskForm = ({ existingTask, onTaskUpdated }) => {
       </div>
 
       <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>
-        {/* 6. Change button text based on mode */}
         {existingTask ? 'Save Changes' : 'Add Task'}
       </button>
     </form>
