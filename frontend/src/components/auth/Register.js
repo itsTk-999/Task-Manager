@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'; // <-- 1. Import icons
+import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Register = ({ onToggleMode }) => {
   const [formData, setFormData] = useState({
@@ -9,7 +9,7 @@ const Register = ({ onToggleMode }) => {
     password: '',
   });
   const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // <-- 2. Add state
+  const [showPassword, setShowPassword] = useState(false);
 
   const { name, email, password } = formData;
 
@@ -18,7 +18,34 @@ const Register = ({ onToggleMode }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // ... (register logic)
+    setError('');
+
+    try {
+      const res = await axios.post(
+        '/api/users/register', // <-- USE RELATIVE PATH
+        { name, email, password },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+
+      localStorage.setItem('token', res.data.token);
+      window.location.href = '/dashboard'; // Redirect to dashboard
+
+    } catch (err) {
+      // --- ROBUST CATCH BLOCK ---
+      console.error("Registration failed:", err); 
+      
+      if (err.response) {
+        // Server responded with an error (e.g., 400 "User already exists")
+        setError(err.response.data?.msg || 'Registration failed. Please check your email.');
+      } else if (err.request) {
+        // Request was made, but no response was received (SERVER OFFLINE)
+        setError('Cannot connect to the server. Is your backend running?');
+      } else {
+        // Something else happened (e.g., JS error)
+        setError('An unexpected error occurred.');
+      }
+      // --- END ROBUST CATCH BLOCK ---
+    }
   };
 
   return (
@@ -56,10 +83,9 @@ const Register = ({ onToggleMode }) => {
         </label>
       </div>
 
-      {/* --- 3. UPDATE PASSWORD BLOCK --- */}
       <div className="form-group">
         <input
-          type={showPassword ? 'text' : 'password'} 
+          type={showPassword ? 'text' : 'password'}
           id="password"
           className="form-input"
           value={password}
@@ -70,7 +96,6 @@ const Register = ({ onToggleMode }) => {
         <label htmlFor="password" className="form-label">
           <FaLock /> Password
         </label>
-        {/* The icon */}
         {showPassword ? (
           <FaEyeSlash
             className="password-icon"
@@ -83,7 +108,6 @@ const Register = ({ onToggleMode }) => {
           />
         )}
       </div>
-      {/* --- END UPDATE --- */}
 
       <button type="submit" className="btn btn-primary">
         Register

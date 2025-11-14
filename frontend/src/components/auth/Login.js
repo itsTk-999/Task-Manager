@@ -21,31 +21,32 @@ const Login = ({ onToggleMode }) => {
     setError(''); // Clear previous errors
     
     try {
-      const res = await axios.post(
-        '/api/users/login',
-        { email, password },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+      // Use the relative path here, as the base URL is set in index.js
+      const res = await axios.post('/api/users/login', { 
+        email, 
+        password 
+      }, { 
+        headers: { 'Content-Type': 'application/json' } 
+      });
 
       localStorage.setItem('token', res.data.token);
       window.location.href = '/dashboard'; // Redirect to dashboard
 
     } catch (err) {
-      // --- THIS IS THE ROBUST FIX ---
-      console.error("Login failed:", err); // Log the full error to the console
+      // --- ROBUST CATCH BLOCK ---
+      console.error("Login failed:", err); 
       
       if (err.response) {
         // The server responded with an error (e.g., 400 "Invalid Credentials")
         setError(err.response.data?.msg || 'Invalid credentials or server error.');
       } else if (err.request) {
-        // The request was made, but no response was received
-        // This means the backend server is likely OFFLINE.
+        // The request was made, but no response was received (SERVER OFFLINE)
         setError('Cannot connect to the server. Is your backend running?');
       } else {
-        // Something else happened setting up the request
+        // Something else happened (e.g., syntax error)
         setError('An unexpected error occurred.');
       }
-      // --- END FIX ---
+      // --- END ROBUST CATCH BLOCK ---
     }
   };
 
